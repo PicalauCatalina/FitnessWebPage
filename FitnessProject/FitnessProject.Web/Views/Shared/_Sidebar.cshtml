@@ -1,0 +1,45 @@
+﻿<div class="deznav-scroll">
+     <ul class="metismenu" id="menu">
+          <li>
+               <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                    <i class="flaticon-381-networking"></i>
+                    <span class="nav-text">Dashboard</span>
+               </a>
+               <ul aria-expanded="false">
+                    @{
+                         if (ViewBag.Role == "User")
+                         {
+                              <li><a href="/Home/Index">Dashboard</a></li>
+                              <li><a href="/Workout/Statistic">Workout Statistic</a></li>
+                              <li><a href="/Workout/Index">Workout Plan</a></li>
+                              <li><a href="/Nutrition/Statistic">Nutrition Statistic</a></li>
+                         }
+                         if (ViewBag.Role == "Admin")
+                         {
+                              <li><a href="/Workspace/ManageFood">Manage Food</a></li>
+                              <li><a href="/Workspace/ManageWorkout">Manage Workout</a></li>
+
+                         }
+                    }
+                    
+               </ul>
+          </li>
+          <li>
+               <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                    <i class="flaticon-381-television"></i>
+                    <span class="nav-text">Account</span>
+               </a>
+               <ul aria-expanded="false">
+                    <li><a href="/Profile/Index">Profile</a></li>
+               </ul>
+          </li>
+     </ul>
+     <div class="drum-box">
+          <img src="~/Content/images/card/drump.png" alt="">
+          <p class="fs-18 font-w500 mb-4">You will become stronger with Xtreme</p>
+          
+     </div>
+     <div class="copyright">
+          <p><strong>Fitness Project</strong> ©All Rights Reserved</p>
+     </div>
+</div>

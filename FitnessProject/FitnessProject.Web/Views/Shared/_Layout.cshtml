@@ -1,0 +1,109 @@
+﻿@using System.Web.Optimization
+@{
+     Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+     <meta name="viewport" content="width=device-width" />
+     <title>Fitness</title>
+     @Styles.Render("~/bundles/chartist.min/css")
+     @Styles.Render("~/bundles/bootstrap-select.min/css")
+     @Styles.Render("~/bundles/style/css")
+     @Styles.Render("~/bundles/LineIcons/css")
+     @Styles.Render("~/bundles/owl.carousel/css")
+     @Styles.Render("~/bundles/bootstrap-datetimepicker.min/css")
+     
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+     <!-- Favicon icon -->
+     <link rel="icon" type="image/png" sizes="16x16" href="~/Content/images/favicon.png">
+</head>
+<body>
+     <div id="preloader">
+          @Html.Partial("_Preloader")
+     </div>
+     <div id="main-wrapper">
+          @RenderBody()
+          <div class="deznav">
+               @Html.Partial("_Sidebar")
+          </div>
+          <div class="nav-header">
+               @Html.Partial("_NavHeader")
+          </div>
+          <div class="header">
+               @Html.Partial("_Header")
+          </div>
+          <div class="footer">
+               @Html.Partial("_Footer")
+          </div>
+     </div>
+
+
+     @Scripts.Render("~/bundles/global.min/js")
+     @Scripts.Render("~/bundles/bootstrap-select.min/js")
+     @Scripts.Render("~/bundles/Chart.bundle.min/js")
+     @Scripts.Render("~/bundles/custom.min/js")
+     @Scripts.Render("~/bundles/deznav-init/js")
+     @Scripts.Render("~/bundles/owl.carousel/js")
+     @Scripts.Render("~/bundles/moment/js")
+     @Scripts.Render("~/bundles/bootstrap-datetimepicker.min/js")
+     @Scripts.Render("~/bundles/jquery.peity/js")
+     @Scripts.Render("~/bundles/unobtrusive-ajax/js")
+     @Scripts.Render("~/bundles/unobtrusive-ajax-min/js")
+     <script src="~/Content/vendor/apexchart/apexchart.js"></script>
+     <script>
+          function featuredmenus() {
+
+               /*  testimonial one function by = owl.carousel.js */
+               jQuery('.featured-menus').owlCarousel({
+                    loop: false,
+                    margin: 30,
+                    nav: true,
+                    autoplaySpeed: 3000,
+                    navSpeed: 3000,
+                    paginationSpeed: 3000,
+                    slideSpeed: 3000,
+                    smartSpeed: 3000,
+                    autoplay: false,
+                    dots: false,
+                    navText: ['<i class="fa fa-caret-left"></i>', '<i class="fa fa-caret-right"></i>'],
+                    responsive: {
+                         0: {
+                              items: 1
+                         },
+                         576: {
+                              items: 1
+                         },
+                         767: {
+                              items: 1
+                         },
+                         991: {
+                              items: 2
+                         },
+                         1200: {
+                              items: 2
+                         },
+                         1600: {
+                              items: 3
+                         }
+                    }
+               })
+          }
+
+          jQuery(window).on('load', function () {
+               setTimeout(function () {
+                    featuredmenus();
+               }, 1000);
+          });</script>
+     <script>
+          $(function () {
+               $('#datetimepicker1').datetimepicker({
+                    inline: true,
+               });
+          });
+     </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+﻿@using System.Web.Optimization
+@{
+     Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title Xtreme - Fitness Services</title>
+    @Styles.Render("~/bundles/bootstrap-select.min/css")
+    @Styles.Render("~/bundles/style/css")
+
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="~/Content/images/favicon.png">
+</head>
+<body class="h-100">
+     <div id="main-wrapper">
+          @RenderBody()
+     </div>
+
+     <!-- Required vendors -->
+     @Scripts.Render("~/bundles/global.min/js")
+     @Scripts.Render("~/bundles/bootstrap-select.min/js")
+     @Scripts.Render("~/bundles/custom.min/js")
+     @Scripts.Render("~/bundles/deznav-init/js")
+     
+</body>
+</html>
