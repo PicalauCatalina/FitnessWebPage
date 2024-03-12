@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FitnessProject.Domain.Entities.User;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,7 @@ namespace FitnessProject.BusinessLogic.Interfaces
 {
      public interface ISession
      {
+          PostResponse UserLogin(ULoginData data);
+          PostResponse UserSignUp(USignupData data);
      }
 }

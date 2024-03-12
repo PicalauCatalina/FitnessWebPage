@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FitnessProject.Domain.Entities.User;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,14 @@ namespace FitnessProject.BusinessLogic.Core
 {
      public class UserApi
      {
+          internal PostResponse UserLoginAction(ULoginData data)
+          {
+               throw new NotImplementedException();
+          }
+
+          internal PostResponse UserSignupAction(USignupData data)
+          {
+               throw new NotImplementedException();
+          }
      }
 }

@@ -553,6 +553,16 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FitnessProject.BusinessLogic\FitnessProject.BusinessLogic.csproj">
+      <Project>{c28cee60-1b3b-4c06-ab72-1007b0c59da4}</Project>
+      <Name>FitnessProject.BusinessLogic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FitnessProject.Domain\FitnessProject.Domain.csproj">
+      <Project>{ae920088-3f02-4d9b-9568-b8aead9f5258}</Project>
+      <Name>FitnessProject.Domain</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

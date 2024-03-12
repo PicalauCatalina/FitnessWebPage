@@ -9,7 +9,7 @@ namespace FitnessProject.Domain.Enums
      public enum URole
      {
           User,
-          Admin,
-          Moderator
+          Moderator,
+          Admin
      }
 }
