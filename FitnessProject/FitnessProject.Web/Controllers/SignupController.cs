@@ -55,15 +55,6 @@ namespace FitnessProject.Web.Controllers
                     {
                          ModelState.AddModelError("", userSignup.StatusMsg);
                     }
-
-                    Debug.WriteLine("Email: " + signup.Email);
-                    Debug.WriteLine("Username: " + signup.Username);
-                    Debug.WriteLine("Password: " + signup.Password);
-                    Debug.WriteLine("ConfirmPassword: " + signup.ConfirmPassword);
-                    Debug.WriteLine("Height: " + signup.Height);
-                    Debug.WriteLine("Weight: " + signup.Weight);
-                    Debug.WriteLine("WeightTarget: " + signup.WeightTarget);
-                    Debug.WriteLine("Age: " + signup.Age);
                }
                return View();
           }

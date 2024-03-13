@@ -13,6 +13,5 @@ namespace FitnessProject.BusinessLogic
           {
                return new SessionBL();
           }
-
      }
 }

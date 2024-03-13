@@ -41,7 +41,6 @@ namespace FitnessProject.Web.Controllers
                          LoginDateTime = DateTime.Now
                     };
 
-
                     var userLogin = _session.UserLogin(data);
                     if (userLogin.Status)
                     {
@@ -51,8 +50,6 @@ namespace FitnessProject.Web.Controllers
                     {
                          ModelState.AddModelError("", userLogin.StatusMsg);
                     }
-                    Debug.WriteLine("Credential: " + login.Credential);
-                    Debug.WriteLine("Password: " + login.Password);
                }
                return View();
           }
