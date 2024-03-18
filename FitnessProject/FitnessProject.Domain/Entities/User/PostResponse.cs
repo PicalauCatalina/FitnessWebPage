@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FitnessProject.Domain.Entities.User
+﻿namespace FitnessProject.Domain.Entities.User
 {
      public class PostResponse
      {
