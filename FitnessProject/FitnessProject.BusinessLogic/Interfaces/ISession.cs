@@ -1,4 +1,5 @@
-﻿using FitnessProject.Domain.Entities.User;
+﻿using System.Web;
+using FitnessProject.Domain.Entities.User;
 
 namespace FitnessProject.BusinessLogic.Interfaces
 {
@@ -6,5 +7,7 @@ namespace FitnessProject.BusinessLogic.Interfaces
      {
           PostResponse UserLogin(ULoginData data);
           PostResponse UserSignUp(USignupData data);
+          HttpCookie GenCookie(string loginCredential);
+          UserMinimal GetUserByCookie(string apiCookieValue);
      }
 }

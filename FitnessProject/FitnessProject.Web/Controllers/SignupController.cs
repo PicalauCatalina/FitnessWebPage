@@ -16,6 +16,7 @@ namespace FitnessProject.Web.Controllers
           }
           public ActionResult Index()
           {
+               ViewBag.Title = "Signup";
                UserSignup signup = new UserSignup();
 
                return View(signup);
@@ -45,12 +46,10 @@ namespace FitnessProject.Web.Controllers
                     var userSignup = _session.UserSignUp(data);
                     if (userSignup.Status)
                     {
-                         return RedirectToAction("Index", "Home");
+                         return RedirectToAction("Index", "Login");
                     }
-                    else
-                    {
-                         ModelState.AddModelError("", userSignup.StatusMsg);
-                    }
+
+                    ModelState.AddModelError("", userSignup.StatusMsg);
                }
                return View();
           }

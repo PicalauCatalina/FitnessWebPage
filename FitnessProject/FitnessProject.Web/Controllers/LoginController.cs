@@ -2,6 +2,7 @@
 using FitnessProject.Domain.Entities.User;
 using FitnessProject.Web.Models;
 using System;
+using System.Web;
 using System.Web.Mvc;
 
 
@@ -40,12 +41,13 @@ namespace FitnessProject.Web.Controllers
                     var userLogin = _session.UserLogin(data);
                     if (userLogin.Status)
                     {
-                         return RedirectToAction("Index", "Home");
+                         HttpCookie cookie = _session.GenCookie(login.Credential);
+                         ControllerContext.HttpContext.Response.Cookies.Add(cookie);
+                         return RedirectToAction("Index", "Profile");
                     }
-                    else
-                    {
-                         ModelState.AddModelError("", userLogin.StatusMsg);
-                    }
+
+                    ModelState.AddModelError("", userLogin.StatusMsg);
+                    return View();
                }
                return View();
           }
