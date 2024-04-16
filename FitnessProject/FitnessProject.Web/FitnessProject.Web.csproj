@@ -517,6 +517,7 @@
     </Compile>
     <Compile Include="Models\GlobalModel.cs" />
     <Compile Include="Models\Nutrition.cs" />
+    <Compile Include="Models\NutritionQuantity.cs" />
     <Compile Include="Models\UserLogin.cs" />
     <Compile Include="Models\UserSignup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
