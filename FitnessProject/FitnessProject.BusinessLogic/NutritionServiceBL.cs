@@ -15,7 +15,7 @@ namespace FitnessProject.BusinessLogic
 
         public PostResponse CreateNutritionItem(NutritionData data)
         {
-            throw new System.NotImplementedException();
+            return CreateNutritionItemAction(data);
         }
 
         public List<NutritionData> GetNutritionList()
