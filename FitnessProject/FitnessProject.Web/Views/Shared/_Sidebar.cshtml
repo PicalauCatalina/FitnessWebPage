@@ -14,11 +14,10 @@
                               <li><a href="/Workout/Index">Workout Plan</a></li>
                               <li><a href="/Nutrition/Statistic">Nutrition Statistic</a></li>
                          }
-                         if (ViewBag.Role == "Admin")
+                         if (ViewBag.Role == "Moderator")
                          {
-                              <li><a href="/Workspace/ManageFood">Manage Food</a></li>
+                              <li><a href="/Workspace/ManageNutrition">Manage Nutrition</a></li>
                               <li><a href="/Workspace/ManageWorkout">Manage Workout</a></li>
-
                          }
                     }
                     
@@ -35,9 +34,7 @@
           </li>
      </ul>
      <div class="drum-box">
-          <img src="~/Content/images/card/drump.png" alt="">
-          <p class="fs-18 font-w500 mb-4">You will become stronger with Xtreme</p>
-          
+          <img src="~/Content/images/card/drump.png" alt="">          
      </div>
      <div class="copyright">
           <p><strong>Fitness Project</strong> ©All Rights Reserved</p>

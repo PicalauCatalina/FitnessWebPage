@@ -20,6 +20,7 @@ namespace FitnessProject.Web.Controllers
           public ActionResult ManageNutrition()
           {
                ViewBag.Title = "Manage Nutrition";
+               ViewBag.Role = "Moderator";
                List<NutritionData> nutritionList = _nutritionService.GetNutritionList();
                model.NutritionList = new List<Nutrition>();
                foreach (var item in nutritionList)
