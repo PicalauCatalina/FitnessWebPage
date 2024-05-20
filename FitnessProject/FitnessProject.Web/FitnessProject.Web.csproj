@@ -514,6 +514,7 @@
     <Compile Include="Controllers\WorkspaceController.cs" />
     <Compile Include="Extensions\HttpContextExtensions.cs" />
     <Compile Include="Filters\AuthorizeModAttribute.cs" />
+    <Compile Include="Filters\ModeratorModAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

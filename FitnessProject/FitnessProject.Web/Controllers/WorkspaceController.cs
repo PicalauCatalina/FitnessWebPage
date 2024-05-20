@@ -3,10 +3,12 @@ using System.Web.Mvc;
 using FitnessProject.BusinessLogic.Interfaces;
 using FitnessProject.Domain.Entities.Nutrition;
 using FitnessProject.Domain.Entities.User;
+using FitnessProject.Web.Filters;
 using FitnessProject.Web.Models;
 
 namespace FitnessProject.Web.Controllers
 {
+     [ModeratorMod]
      public class WorkspaceController : Controller
      {
           private readonly INutritionService _nutritionService;
