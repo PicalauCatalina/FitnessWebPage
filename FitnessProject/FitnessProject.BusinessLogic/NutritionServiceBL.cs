@@ -20,7 +20,7 @@ namespace FitnessProject.BusinessLogic
 
         public NutritionData GetNutrition(int nutritionId)
         {
-            throw new System.NotImplementedException();
+            return GetNutritionAction(nutritionId);
         }
     }
 }

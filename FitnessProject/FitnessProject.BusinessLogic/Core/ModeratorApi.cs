@@ -61,5 +61,23 @@ namespace FitnessProject.BusinessLogic.Core
                }
                return foodList;
           }
+          
+          public NutritionData GetNutritionAction(int nutritionId)
+          {
+               NutritionDbTable result;
+               using (var db = new FitnessDbContext())
+               {
+                    result = db.Nutrition.FirstOrDefault(u => u.Id == nutritionId);
+               }
+               return new NutritionData
+               {
+                    Id = result.Id,
+                    Name = result.Name,
+                    Carbohydrate = result.Carbohydrate,
+                    Protein = result.Protein,
+                    Fat = result.Fat,
+                    EnergyValue = result.EnergyValue
+               };
+          }
      }
 }
