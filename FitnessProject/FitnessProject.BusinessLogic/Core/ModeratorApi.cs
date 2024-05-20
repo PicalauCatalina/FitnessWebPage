@@ -1,4 +1,5 @@
-﻿using FitnessProject.BusinessLogic.DBModel;
+﻿using System.Collections.Generic;
+using FitnessProject.BusinessLogic.DBModel;
 using FitnessProject.Domain.Entities.Nutrition;
 using FitnessProject.Domain.Entities.User;
 using System.Linq;
@@ -37,6 +38,28 @@ namespace FitnessProject.BusinessLogic.Core
                     db.SaveChanges();
                }
                return new PostResponse { Status = true };
+          }
+          
+          public List<NutritionData> GetNutritionListAction()
+          {
+               List<NutritionData> foodList = new List<NutritionData>();
+               using (var db = new FitnessDbContext())
+               {
+                    var foodDbList = db.Nutrition.ToList();
+                    foreach (var food in foodDbList)
+                    {
+                         foodList.Add(new NutritionData
+                         {
+                              Id = food.Id,
+                              Name = food.Name,
+                              Carbohydrate = food.Carbohydrate,
+                              Protein = food.Protein,
+                              Fat = food.Fat,
+                              EnergyValue = food.EnergyValue
+                         });
+                    }
+               }
+               return foodList;
           }
      }
 }

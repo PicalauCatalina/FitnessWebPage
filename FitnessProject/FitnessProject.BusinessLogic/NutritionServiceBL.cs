@@ -8,11 +8,6 @@ namespace FitnessProject.BusinessLogic
 {
     public class NutritionServiceBL : ModeratorApi, INutritionService
     {
-        public PostResponse AddNutritionProgress(int nutritionId, int nutritionQuantity, int userId)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public PostResponse CreateNutritionItem(NutritionData data)
         {
             return CreateNutritionItemAction(data);
@@ -20,7 +15,7 @@ namespace FitnessProject.BusinessLogic
 
         public List<NutritionData> GetNutritionList()
         {
-            throw new System.NotImplementedException();
+            return GetNutritionListAction();
         }
 
         public NutritionData GetNutrition(int nutritionId)
