@@ -51,6 +51,15 @@
     <Compile Include="Interfaces\IProgressManager.cs" />
     <Compile Include="Interfaces\ISession.cs" />
     <Compile Include="Interfaces\IWorkoutService.cs" />
+    <Compile Include="Migrations\202403131604138_InitialCreate.cs" />
+    <Compile Include="Migrations\202403131604138_InitialCreate.Designer.cs">
+      <DependentUpon>202403131604138_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202405231845076_Initial.cs" />
+    <Compile Include="Migrations\202405231845076_Initial.designer.cs">
+      <DependentUpon>202405231845076_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NutritionServiceBL.cs" />
     <Compile Include="ProgressManagerBL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -67,7 +76,14 @@
       <Name>FitnessProject.Helpers</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202403131604138_InitialCreate.resx">
+      <DependentUpon>202403131604138_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202405231845076_Initial.resx">
+      <DependentUpon>202405231845076_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="EntityFramework">
       <Version>6.4.4</Version>
