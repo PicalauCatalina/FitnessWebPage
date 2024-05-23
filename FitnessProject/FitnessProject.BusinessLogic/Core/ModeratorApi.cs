@@ -3,11 +3,13 @@ using FitnessProject.BusinessLogic.DBModel;
 using FitnessProject.Domain.Entities.Nutrition;
 using FitnessProject.Domain.Entities.User;
 using System.Linq;
+using FitnessProject.Domain.Entities.Workout;
 
 namespace FitnessProject.BusinessLogic.Core
 {
      public class ModeratorApi
      {
+          // [Nutrition methods]
           public PostResponse CreateNutritionItemAction(NutritionData data)
           {
                NutritionDbTable item;
@@ -79,5 +81,37 @@ namespace FitnessProject.BusinessLogic.Core
                     EnergyValue = result.EnergyValue
                };
           }
+          
+          
+          // [Workout methods]
+          public PostResponse CreateWorkoutAction(WorkoutData data)
+          {
+               WorkoutDbTable item;
+               using (var db = new FitnessDbContext())
+               {
+                    item = db.Workout.FirstOrDefault(x => x.PacketName == data.PacketName);
+               }
+               if (item != null)
+               {
+                    return new PostResponse { Status = false, StatusMsg = "The packet already exists" };
+               }
+
+               if (data.PacketName == null || data.Json == null)
+               {
+                    return new PostResponse { Status = false, StatusMsg = "You need to fill all the fields" };
+               }
+               item = new WorkoutDbTable()
+               {
+                    PacketName = data.PacketName,
+                    Json = data.Json
+               };
+               using (var db = new FitnessDbContext())
+               {
+                    db.Workout.Add(item);
+                    db.SaveChanges();
+               }
+               return new PostResponse { Status = true };
+          }
+          
      }
 }

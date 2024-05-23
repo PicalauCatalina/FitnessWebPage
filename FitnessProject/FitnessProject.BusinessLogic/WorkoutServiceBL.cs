@@ -10,7 +10,7 @@ namespace FitnessProject.BusinessLogic
     {
         public PostResponse CreateWorkout(WorkoutData data)
         {
-            throw new System.NotImplementedException();
+            return CreateWorkoutAction(data);
         }
 
         public WorkoutData GetWorkout(int workoutId)
