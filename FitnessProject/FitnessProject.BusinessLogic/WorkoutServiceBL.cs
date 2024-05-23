@@ -20,7 +20,7 @@ namespace FitnessProject.BusinessLogic
 
         public List<WorkoutData> GetWorkoutList()
         {
-            throw new System.NotImplementedException();
+            return GetWorkoutListAction();
         }
 
     }

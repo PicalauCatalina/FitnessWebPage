@@ -113,5 +113,24 @@ namespace FitnessProject.BusinessLogic.Core
                return new PostResponse { Status = true };
           }
           
+          public List<WorkoutData> GetWorkoutListAction()
+          {
+               List<WorkoutData> workoutList = new List<WorkoutData>();
+               using (var db = new FitnessDbContext())
+               {
+                    var workoutDbList = db.Workout.ToList();
+                    foreach (var workout in workoutDbList)
+                    {
+                         workoutList.Add(new WorkoutData
+                         {
+                              Id = workout.Id,
+                              PacketName = workout.PacketName,
+                              Json = workout.Json,
+                         });
+                    }
+               }
+               return workoutList;
+          }
+          
      }
 }
