@@ -7,36 +7,42 @@ using FitnessProject.Web.Models;
 
 namespace FitnessProject.Web.Controllers
 {
-     [AuthorizeMod]
-     public class ProfileController : BaseController
-     {
-          private GlobalModel model;
+    [AuthorizeMod]
+    public class ProfileController : BaseController
+    {
+        private GlobalModel model;
 
-          public ProfileController()
-          {
-               model = new GlobalModel();
-               model.User = new UserMinimal();
-          }
+        public ProfileController()
+        {
+            model = new GlobalModel();
+            model.User = new UserMinimal();
+        }
 
-          public ActionResult Index()
-          {
-               ViewBag.Title = "Profile";
-               model.User = System.Web.HttpContext.Current.GetMySessionObject();
-               SessionStatus();
-               if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
-               {
-                    return RedirectToAction("Index", "Login");
-               };
-               if (model.User.Level == URole.Admin)
-               {
+        public ActionResult Index()
+        {
+            ViewBag.Title = "Profile";
+            model.User = System.Web.HttpContext.Current.GetMySessionObject();
+            SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("Index", "Login");
+            }
+
+            switch (model.User.Level)
+            {
+                case URole.Admin:
                     ViewBag.Role = "Admin";
-               }
-               else if (model.User.Level == URole.User)
-               {
+                    break;
+                case URole.User:
                     ViewBag.Role = "User";
-               }
-               model.User.CalculateBMR();
-               return View(model);
-          }
-     }
+                    break;
+                case URole.Moderator:
+                    ViewBag.Role = "Moderator";
+                    break;
+            }
+
+            model.User.CalculateBMR();
+            return View(model);
+        }
+    }
 }

@@ -18,6 +18,8 @@ namespace FitnessProject.Web.Controllers
                var bl = new BusinessLogic.BusinessLogic();
                model = new GlobalModel();
                model.User = new UserMinimal();
+               _nutritionService = bl.GetNutritionServiceBL();
+               
           }
           public ActionResult ManageNutrition()
           {
