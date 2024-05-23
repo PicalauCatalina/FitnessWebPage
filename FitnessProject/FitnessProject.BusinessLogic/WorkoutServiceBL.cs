@@ -15,7 +15,7 @@ namespace FitnessProject.BusinessLogic
 
         public WorkoutData GetWorkout(int workoutId)
         {
-            throw new System.NotImplementedException();
+            return GetWorkoutAction(workoutId);
         }
 
         public List<WorkoutData> GetWorkoutList()

@@ -132,5 +132,20 @@ namespace FitnessProject.BusinessLogic.Core
                return workoutList;
           }
           
+          public WorkoutData GetWorkoutAction(int workoutId)
+          {
+               WorkoutDbTable result;
+               using (var db = new FitnessDbContext())
+               {
+                    result = db.Workout.FirstOrDefault(u => u.Id == workoutId);
+               }
+               return new WorkoutData
+               {
+                    Id = result.Id,
+                    PacketName = result.PacketName,
+                    Json = result.Json
+               };
+          }
+          
      }
 }
