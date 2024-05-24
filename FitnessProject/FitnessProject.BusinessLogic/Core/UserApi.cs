@@ -1,12 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using FitnessProject.BusinessLogic.DBModel;
 using FitnessProject.Domain.Entities.User;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
+using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Web;
+using FitnessProject.Domain.Entities.Nutrition;
 using FitnessProject.Domain.Entities.Session;
 using FitnessProject.Helpers;
+using Newtonsoft.Json;
 
 namespace FitnessProject.BusinessLogic.Core
 {
@@ -221,5 +227,162 @@ namespace FitnessProject.BusinessLogic.Core
                 Level = uData.Level
             };
         }
+        
+        
+        public PostResponse AddNutrition(int nutritionId, int nutritionQuantity, int userId)
+          {
+               UProgressDbTable result;
+               NutritionDataMinimal json = new NutritionDataMinimal()
+               {
+                    Id = nutritionId,
+                    Quantity = nutritionQuantity
+               };
+               var date = DateTime.Now.ToString("dd/MM/yyyy");
+               using (var db = new FitnessDbContext())
+               {
+                    result = db.Progress.FirstOrDefault(u => u.UserId == userId && u.Date == date);
+
+                    if (result == null)
+                    {
+                         result = new UProgressDbTable()
+                         {
+                              Date = date,
+                              UserId = userId,
+                              NutritionList = JsonConvert.SerializeObject(new List<NutritionDataMinimal> { json })
+                         };
+
+                         db.Progress.Add(result);
+                    }
+                    else
+                    {
+                         if (result.NutritionList == null)
+                         {
+                              result.NutritionList = JsonConvert.SerializeObject(new List<NutritionDataMinimal> { json });
+                         }
+                         var existingNutritionDataList = JsonConvert.DeserializeObject<List<NutritionDataMinimal>>(result.NutritionList);
+                         existingNutritionDataList.Add(json);
+                         result.NutritionList = JsonConvert.SerializeObject(existingNutritionDataList);
+                    }
+
+                    db.SaveChanges();
+               }
+
+               List<NutritionDataMinimal> nutritionDataList = new List<NutritionDataMinimal>();
+               using (var db = new FitnessDbContext())
+               {
+                    result = db.Progress.FirstOrDefault(u => u.UserId == userId && u.Date == date);
+                    nutritionDataList = JsonConvert.DeserializeObject<List<NutritionDataMinimal>>(result.NutritionList);
+               }
+
+               return new PostResponse { Status = true };
+          }
+
+          public PostResponse AddWorkout(int userId)
+          {
+               UProgressDbTable result;
+               var date = DateTime.Now.ToString("dd/MM/yyyy");
+               using (var db = new FitnessDbContext())
+               {
+                    result = db.Progress.FirstOrDefault(u => u.UserId == userId && u.Date == date);
+
+                    if (result == null)
+                    {
+                         result = new UProgressDbTable()
+                         {
+                              Date = date,
+                              NutritionList = null,
+                              UserId = userId,
+                              WorkoutDone = 1
+                         };
+
+                         db.Progress.Add(result);
+                    }
+                    else
+                    {
+                         var existingWorkoutList = result.WorkoutDone;
+                         existingWorkoutList++;
+                         result.WorkoutDone = existingWorkoutList;
+                    }
+                    try
+                    {
+                         db.SaveChanges();
+                    }
+                    catch (DbEntityValidationException ex)
+                    {
+                         foreach (var error in ex.EntityValidationErrors)
+                         {
+                              foreach (var validationError in error.ValidationErrors)
+                              {
+                                   Debug.WriteLine($"Property: {validationError.PropertyName}");
+                                   Debug.WriteLine($"Error: {validationError.ErrorMessage}");
+                              }
+                         }
+                    }
+               }
+               return new PostResponse { Status = true };
+          }
+
+          public PostResponse AddSleep(int sleepHours, int userId)
+          {
+               UProgressDbTable result;
+               var date = DateTime.Now.ToString("dd/MM/yyyy");
+               using (var db = new FitnessDbContext())
+               {
+                    result = db.Progress.FirstOrDefault(u => u.UserId == userId && u.Date == date);
+
+                    if (result == null)
+                    {
+                         result = new UProgressDbTable()
+                         {
+                              Date = date,
+                              UserId = userId,
+                              SleepHours = sleepHours
+                         };
+
+                         db.Progress.Add(result);
+                    }
+                    else
+                    {
+                         result.SleepHours += sleepHours;
+                    }
+
+                    db.SaveChanges();
+
+               }
+
+               return new PostResponse { Status = true };
+          }
+          
+          public List<UProgressData> RestoreProgressAction(int numberOfDays, int userId)
+          {
+              var dateLimitString = DateTime.Now.AddDays(-numberOfDays).ToString("dd/MM/yyyy");
+              DateTime dateLimit = DateTime.ParseExact(dateLimitString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
+              List<UProgressData> activity = new List<UProgressData>();
+              using (var db = new FitnessDbContext())
+              {
+                  var progressList = db.Progress
+                      .Where(u => u.UserId == userId)
+                      .AsEnumerable()
+                      .Where(u => DateTime.ParseExact(u.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture) >= dateLimit)
+                      .ToList();
+
+                  foreach (var item in progressList)
+                  {
+                      activity.Add(new UProgressData
+                      {
+                          Date = item.Date,
+                          NutitionList = item.NutritionList,
+                          WorkoutDone = item.WorkoutDone,
+                          SleepHours = item.SleepHours
+                      });
+                  }
+              }
+              activity.Sort((x, y) => DateTime.ParseExact(x.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                  .CompareTo(DateTime.ParseExact(y.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture)));
+
+              activity.Reverse();
+              return activity;
+          }
     }
 }

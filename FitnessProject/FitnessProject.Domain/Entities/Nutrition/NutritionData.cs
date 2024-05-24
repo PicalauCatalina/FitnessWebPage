@@ -10,4 +10,10 @@
           public double EnergyValue { get; set; }
 
      }
+     public class NutritionDataMinimal
+     {
+          public int Id { get; set; }
+          public int Quantity { get; set; }
+
+     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using FitnessProject.BusinessLogic.Core;
 using FitnessProject.BusinessLogic.Interfaces;
 using FitnessProject.Domain.Entities.User;
@@ -6,14 +7,24 @@ namespace FitnessProject.BusinessLogic
 {
     public class ProgressManagerBL: UserApi, IProgressManager
     {
-        public PostResponse AddNutritionProgress(int NutritionID, int NutritionQuantity, int UserID)
+        public PostResponse AddNutritionProgress(int nutritionId,int nutritionQuantity, int userId)
         {
-            throw new System.NotImplementedException();
+            return AddNutrition(nutritionId, nutritionQuantity, userId);
         }
 
-        public PostResponse AddWorkoutProgress(int UserID)
+        public PostResponse AddWorkoutProgress(int userId)
         {
-            throw new System.NotImplementedException();
+            return AddWorkout(userId);
+        }
+
+        public PostResponse AddSleepProgress(int sleepHours, int userId)
+        {
+            return AddSleep(sleepHours, userId);
+        }
+
+        public List<UProgressData> RestoreProgress(int numberOfDays, int userId)
+        {
+            return RestoreProgressAction(numberOfDays, userId);
         }
     }
 }
