@@ -8,5 +8,8 @@ namespace FitnessProject.Web.Models
           public UserMinimal User { get; set; }
           public Nutrition NutritionData { get; set; }
           public List<Nutrition> NutritionList { get; set; }
+          
+          public Workout Workout { get; set; }
+          public List<Workout> WorkoutList { get; set; }
      }
 }

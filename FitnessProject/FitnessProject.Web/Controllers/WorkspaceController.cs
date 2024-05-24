@@ -3,8 +3,10 @@ using System.Web.Mvc;
 using FitnessProject.BusinessLogic.Interfaces;
 using FitnessProject.Domain.Entities.Nutrition;
 using FitnessProject.Domain.Entities.User;
+using FitnessProject.Domain.Entities.Workout;
 using FitnessProject.Web.Filters;
 using FitnessProject.Web.Models;
+using Newtonsoft.Json;
 
 namespace FitnessProject.Web.Controllers
 {
@@ -12,6 +14,7 @@ namespace FitnessProject.Web.Controllers
      public class WorkspaceController : Controller
      {
           private readonly INutritionService _nutritionService;
+          private readonly IWorkoutService _workoutService;
           private GlobalModel model;
           public WorkspaceController()
           {
@@ -19,6 +22,7 @@ namespace FitnessProject.Web.Controllers
                model = new GlobalModel();
                model.User = new UserMinimal();
                _nutritionService = bl.GetNutritionServiceBL();
+               _workoutService = bl.GetWorkoutServiceBL();
                
           }
           public ActionResult ManageNutrition()
@@ -64,6 +68,44 @@ namespace FitnessProject.Web.Controllers
                     ModelState.AddModelError("", response.StatusMsg);
                     return View();
                }
+          }
+          
+          public ActionResult ManageWorkout()
+          {
+               ViewBag.Title = "Manage Workout";
+               ViewBag.Role = "Moderator";
+               model.WorkoutList = new List<Workout>();
+               model.Workout = new Workout();
+               
+               List<WorkoutData> workoutList = _workoutService.GetWorkoutList();
+               
+               foreach (var item in workoutList)
+               {
+                    model.WorkoutList.Add(new Workout()
+                    {
+                         Id = item.Id,
+                         Json = item.Json,
+                         PacketName = item.PacketName,
+                         WorkoutPacket = JsonConvert.DeserializeObject<WorkoutPacket>(item.Json)
+                    });
+               }
+               
+               return View(model);
+          }
+          
+          [HttpPost]
+          public ActionResult ManageWorkout(Workout workout)
+          {
+               WorkoutData data = new WorkoutData()
+               {
+                    PacketName = workout.PacketName,
+                    Json = workout.Json,
+                    WorkoutPacket = JsonConvert.DeserializeObject<WorkoutPacket>(workout.Json)
+               };
+
+               var workoutInsert = _workoutService.CreateWorkout(data);
+
+               return Json("true", JsonRequestBehavior.AllowGet);
           }
 
      }
