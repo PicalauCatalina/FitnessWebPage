@@ -1,0 +1,386 @@
+@using System.Web.Optimization
+@using Newtonsoft.Json
+@model FitnessProject.Web.Models.GlobalModel
+
+@Scripts.Render("~/bundles/jquery.peity/js")
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl col-md-6">
+                <div class="col-xl-12">
+                    <h2>Today Nutrition Results</h2>
+                    @{
+                        double proteinGoal = Math.Round(Model.User.DailyCaloricIntake * 0.2 / 4, 2);
+                        double proteinLeft = Math.Round(Math.Max((proteinGoal - Model.ProgressList[0].Total.Protein), 0), 2);
+
+                        double carbsGoal = Math.Round(Model.User.DailyCaloricIntake * 0.5 / 4, 2);
+                        double carbsLeft = Math.Round(Math.Max((carbsGoal - Model.ProgressList[0].Total.Carbohydrate), 0), 2);
+
+                        double fatGoal = Math.Round(Model.User.DailyCaloricIntake * 0.3 / 9, 2);
+                        double fatLeft = Math.Round(Math.Max((fatGoal - Model.ProgressList[0].Total.Fat), 0), 2);
+
+                        double percentage = 0;
+
+                        <p>@Model.ProgressList[0].Date</p>
+
+
+                        <div class="card">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">Total</th>
+                                    <th scope="col">Goal</th>
+                                    <th scope="col">Left</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>Protein</td>
+                                    <td>@Model.ProgressList[0].Total.Protein g</td>
+                                    <td>@proteinGoal g</td>
+                                    <td>@proteinLeft g</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        <div class="fill-bar">
+                                            @{
+                                                percentage = Math.Round((Model.ProgressList[0].Total.Protein / proteinGoal) * 100);
+                                                percentage = percentage > 100 ? 100 : percentage;
+                                            }
+                                            <div class="fill-progress" style="width: @percentage%;"></div>
+                                            <div class="progress-text fs-18">@percentage %</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Carbohydrates</td>
+                                    <td>@Model.ProgressList[0].Total.Carbohydrate g</td>
+                                    <td>@carbsGoal g</td>
+                                    <td>@carbsLeft g</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        <div class="fill-bar">
+                                            @{
+                                                percentage = Math.Round((Model.ProgressList[0].Total.Carbohydrate / carbsGoal) * 100);
+                                                percentage = percentage > 100 ? 100 : percentage;
+                                            }
+                                            <div class="fill-progress" style="width: @percentage%;"></div>
+                                            <div class="progress-text fs-18">@percentage %</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Fat</td>
+                                    <td>@Model.ProgressList[0].Total.Fat g</td>
+                                    <td>@fatGoal g</td>
+                                    <td>@fatLeft g</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        <div class="fill-bar">
+                                            @{
+                                                percentage = Math.Round((Model.ProgressList[0].Total.Fat / fatGoal) * 100);
+                                                percentage = percentage > 100 ? 100 : percentage;
+                                            }
+                                            <div class="fill-progress" style="width: @percentage%;"></div>
+                                            <div class="progress-text fs-18">@percentage %</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Energy</td>
+                                    <td>@Model.ProgressList[0].Total.EnergyValue kcal</td>
+                                    <td>@Model.User.DailyCaloricIntake kcal</td>
+                                    <td>@Math.Max((Model.User.DailyCaloricIntake - Model.ProgressList[0].Total.EnergyValue), 0) kcal</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        <div class="fill-bar">
+                                            @{
+                                                percentage = Math.Round((Model.ProgressList[0].Total.EnergyValue / Model.User.DailyCaloricIntake) * 100);
+                                                percentage = percentage > 100 ? 100 : percentage;
+                                            }
+                                            <div class="fill-progress" style="width: @percentage%;"></div>
+                                            <div class="progress-text fs-18">@percentage %</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+                <div class="col-xl-12">
+                    <h2>Daily Chart</h2>
+                    <div class="card">
+                        <div class="card-header d-sm-flex d-block pb-0 border-0">
+                            <div class="d-flex align-items-center">
+
+                                <div class="mr-auto pr-3">
+                                    <h4>Your Daily Results</h4>
+                                </div>
+                            </div>
+                            <div class="dropdown mt-sm-0 mt-3">
+                                <button type="button" class="btn rounded border border-light " aria-expanded="false">
+                                    2 Weeks
+                                </button>
+                            </div>
+
+                        </div>
+
+                        <div class="card-body pb-0">
+                            <div id="chartBar"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <a href="/Home/Index" type="button" class="btn btn-outline-primary rounded">Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+     (function ($) {
+          /* "use strict" */
+          function getFormattedDate(date) {
+               var day = date.getDate().toString().padStart(2, '0');
+               var month = (date.getMonth() + 1).toString().padStart(2, '0');
+               var year = date.getFullYear();
+               return day + '/' + month + '/' + year;
+          }
+
+          function getDays() {
+               var dates = [];
+               var today = new Date();
+               for (var i = 13; i >= 0; i--) {
+                    var date = new Date(today);
+                    date.setDate(today.getDate() - i);
+                    var formattedDate = getFormattedDate(date);
+                    dates.push(formattedDate);
+               }
+               return dates;
+          }
+
+          var Days = getDays();
+          var reducedDays = Days.map(function (date) {
+               return date.substr(0, 5);
+          });
+
+          var ProgressList = @Html.Raw(JsonConvert.SerializeObject(Model.ProgressList));
+          console.log(ProgressList);
+          var protein_data = [];
+          var carbs_data = [];
+          var fat_data = [];
+          var calories_data = [];
+
+          for (var i = 0; i <= 13; i++) {
+               var dateToFind = Days[i];
+               var foundItem = ProgressList.find(function (item) {
+                    return item.Date === dateToFind;
+               });
+
+               if (foundItem) {
+                    protein_data.push((foundItem.Total.Protein / @proteinGoal * 100).toFixed(2));
+                    carbs_data.push((foundItem.Total.Carbohydrate / @carbsGoal * 100).toFixed(2));
+                    fat_data.push((foundItem.Total.Fat / @fatGoal * 100).toFixed(2));
+                    calories_data.push((foundItem.Total.EnergyValue / @Model.User.DailyCaloricIntake * 100).toFixed(2));
+
+               } else {
+                    protein_data.push(0);
+                    carbs_data.push(0);
+                    fat_data.push(0);
+                    calories_data.push(0);
+               }
+          }
+          for (var i = 0; i <= 13; i++) {
+               if (protein_data[i] > 100) {
+                    protein_data[i] = 100;
+               }
+               if (carbs_data[i] > 100) {
+                    carbs_data[i] = 100;
+               }
+               if (fat_data[i] > 100) {
+                    fat_data[i] = 100;
+               }
+               if (calories_data[i] > 100) {
+                    calories_data[i] = 100;
+               }
+          }
+          var dzChartlist = function () {
+
+               var screenWidth = $(window).width();
+
+               var donutChart1 = function () {
+                    $("span.donut1").peity("donut", {
+                         width: "11",
+                         height: "110"
+                    });
+               }
+               var donutChart2 = function () {
+                    $("span.donut2").peity("donut", {
+                         width: "70",
+                         height: "70"
+                    });
+               }
+               var chartBar = function () {
+                    var optionsArea = {
+                         series: [{
+                              name: "Protein",
+                              data: protein_data
+                         },
+                         {
+                              name: "Fat",
+                              data: fat_data
+                         },
+                         {
+                              name: "Carbohydrates",
+                              data: carbs_data
+                         },
+                         {
+                              name: "Calories",
+                              data: calories_data 
+                         }
+                         ],
+                         chart: {
+                              height: 350,
+                              type: 'area',
+                              group: 'social',
+                              toolbar: {
+                                   show: false
+                              },
+                              zoom: {
+                                   enabled: false
+                              },
+                         },
+                         dataLabels: {
+                              enabled: false
+                         },
+                         stroke: {
+                              width: [4, 4, 4, 4],
+                              colors: ['#C046D3', '#1EA7C5', '#FF9432', '#00d941'],
+                              curve: 'straight'
+                         },
+                         legend: {
+                              show: false,
+                              tooltipHoverFormatter: function (val, opts) {
+                                   return val + ' - ' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + ''
+                              },
+                              markers: {
+                                   fillColors: ['#C046D3', '#1EA7C5', '#FF9432', '#00d941'],
+                                   width: 19,
+                                   height: 19,
+                                   strokeWidth: 0,
+                                   radius: 19
+                              }
+                         },
+                         markers: {
+                              size: [8, 8, 8,8],
+                              strokeWidth: [0, 0, 0, 0],
+                              strokeColors: ['#C046D3', '#1EA7C5', '#FF9432', '#00d941'],
+                              border: 0,
+                              colors: ['#C046D3', '#1EA7C5', '#FF9432', '#00d941'],
+                              hover: {
+                                   size: 10,
+                              }
+                         },
+                         xaxis: {
+                              categories: reducedDays,
+                              labels: {
+                                   style: {
+                                        colors: '#3E4954',
+                                        fontSize: '14px',
+                                        fontFamily: 'Poppins',
+                                        fontWeight: 100,
+
+                                   },
+                              },
+                         },
+                         yaxis: {
+                              min: 0,
+                              max: 100,
+                              tickAmount: 11, 
+                              forceNiceScale: true, 
+                              labels: {
+                                   offsetX: -16,
+                                   style: {
+                                        colors: '#3E4954',
+                                        fontSize: '14px',
+                                        fontFamily: 'Poppins',
+                                        fontWeight: 100,
+
+                                   },
+                                   formatter: function (value) {
+                                        return Math.floor(value) + '%'; 
+                                   }
+                              },
+                         },
+                         fill: {
+                              colors: ['#C046D3', '#1EA7C5', '#FF9432', '#00d941'],
+                              type: 'solid',
+                              opacity: 0
+                         },
+                         colors: ['#C046D3', '#1EA7C5', '#FF9432', '#00d941'],
+                         grid: {
+                              borderColor: '#f1f1f1',
+                              xaxis: {
+                                   lines: {
+                                        show: true
+                                   }
+                              }
+                         },
+                         responsive: [{
+                              breakpoint: 575,
+                              options: {
+                                   markers: {
+                                        size: [6, 6, 6,6],
+                                        hover: {
+                                             size: 7,
+                                        }
+                                   }
+                              }
+                         }]
+                    };
+                    var chartArea = new ApexCharts(document.querySelector("#chartBar"), optionsArea);
+                    chartArea.render();
+
+               }
+
+               /* Function ============ */
+               return {
+                    init: function () {
+                    },
+
+
+                    load: function () {
+                         donutChart1();
+                         donutChart2();
+                         chartBar();
+                    },
+
+                    resize: function () {
+
+                    }
+               }
+
+          }();
+
+          jQuery(document).ready(function () {
+          });
+
+          jQuery(window).on('load', function () {
+               setTimeout(function () {
+                    dzChartlist.load();
+               }, 1000);
+
+          });
+
+          jQuery(window).on('resize', function () {
+
+          });
+
+     })(jQuery);
+</script>

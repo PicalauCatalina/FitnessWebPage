@@ -499,6 +499,7 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Views\Nutrition\Statistic.cshtml" />
     <Content Include="Views\Workspace\ManageNutrition.cshtml" />
     <Content Include="Views\Workspace\ManageWorkout.cshtml" />
     <Content Include="Web.config" />
@@ -510,6 +511,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\NutritionController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\SignupController.cs" />
     <Compile Include="Controllers\WorkspaceController.cs" />
