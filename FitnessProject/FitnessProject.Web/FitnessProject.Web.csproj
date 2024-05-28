@@ -516,6 +516,7 @@
     <Compile Include="Extensions\HttpContextExtensions.cs" />
     <Compile Include="Filters\AuthorizeModAttribute.cs" />
     <Compile Include="Filters\ModeratorModAttribute.cs" />
+    <Compile Include="Filters\UserModAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -523,6 +524,7 @@
     <Compile Include="Models\Nutrition.cs" />
     <Compile Include="Models\NutritionQuantity.cs" />
     <Compile Include="Models\UserLogin.cs" />
+    <Compile Include="Models\UserProgress.cs" />
     <Compile Include="Models\UserSignup.cs" />
     <Compile Include="Models\Workout.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

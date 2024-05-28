@@ -36,7 +36,7 @@ namespace FitnessProject.Web.Filters
             else
             {
                 filterContext.Result = new RedirectToRouteResult(
-                    new RouteValueDictionary(new { controller = "Home", action = "Welcome" }));
+                    new RouteValueDictionary(new { controller = "Login", action = "Index" }));
             }
         }
     }

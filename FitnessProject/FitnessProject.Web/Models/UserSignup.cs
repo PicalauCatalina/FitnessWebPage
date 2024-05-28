@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace FitnessProject.Web.Models
 {
@@ -16,6 +18,7 @@ namespace FitnessProject.Web.Models
           public string Gender { get; set; }
           public string LoginIp { get; set; }
           public DateTime LoginDateTime { get; set; }
+          public List<SelectListItem> WorkoutPacketIdList { get; set; }
 
      }
 }

@@ -2,6 +2,7 @@
 using FitnessProject.Domain.Entities.User;
 using FitnessProject.Web.Models;
 using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace FitnessProject.Web.Controllers
@@ -9,17 +10,30 @@ namespace FitnessProject.Web.Controllers
      public class SignupController : Controller
      {
           private readonly ISession _session;
+          private readonly IWorkoutService _workoutService;
           public SignupController()
           {
                var bl = new BusinessLogic.BusinessLogic();
                _session = bl.GetSessionBL();
+               _workoutService = bl.GetWorkoutServiceBL();
           }
           public ActionResult Index()
           {
                ViewBag.Title = "Signup";
-               UserSignup signup = new UserSignup();
+               UserSignup model = new UserSignup();
+               var workoutList = _workoutService.GetWorkoutList();
+               model.WorkoutPacketIdList = new List<SelectListItem>();
+               foreach (var item in workoutList)
+               {
+                    model.WorkoutPacketIdList.Add(new SelectListItem
+                    {
+                         Text = item.PacketName,
+                         Value = item.Id.ToString()
+                    });
+               }
 
-               return View(signup);
+               model.WorkoutPacketIdList.Insert(0, new SelectListItem { Value = "", Text = "-- select packet --" });
+               return View(model);
           }
 
           [HttpPost]

@@ -3,27 +3,26 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using FitnessProject.BusinessLogic.Interfaces;
+using FitnessProject.Domain.Enums;
 using FitnessProject.Web.Extensions;
 
 namespace FitnessProject.Web.Filters
 {
-    public class AuthorizeModAttribute : ActionFilterAttribute
+    public class UserModAttribute : ActionFilterAttribute
     {
         private readonly ISession _session;
-
-        public AuthorizeModAttribute()
+        public UserModAttribute()
         {
             var bl = new BusinessLogic.BusinessLogic();
             _session = bl.GetSessionBL();
         }
-
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             var apiCookie = HttpContext.Current.Request.Cookies["X-KEY"];
             if (apiCookie != null)
             {
                 var profile = _session.GetUserByCookie(apiCookie.Value);
-                if (profile != null)
+                if (profile != null && profile.Level == URole.User)
                 {
                     Debug.WriteLine(profile.Level);
                     HttpContext.Current.SetMySessionObject(profile);
