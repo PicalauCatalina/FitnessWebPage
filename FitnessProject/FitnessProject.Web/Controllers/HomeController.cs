@@ -130,5 +130,21 @@ namespace FitnessProject.Web.Controllers
 
             return View(model);
         }
+        
+        [HttpPost]
+        public ActionResult Index(GlobalModel data)
+        {
+            model.User = System.Web.HttpContext.Current.GetMySessionObject();
+            if (data.SleepHours != 0)
+            {
+                _progressManager.AddSleepProgress(data.SleepHours, model.User.Id);
+            }
+            else
+            {
+                _progressManager.AddNutritionProgress(Int32.Parse(data.NutritionData.Name), data.FoodQuantity, model.User.Id);
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }
