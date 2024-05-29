@@ -17,7 +17,7 @@ namespace FitnessProject.Domain.Entities.User
           public double DailyCaloricIntake { get; set; }
           public double BMR { get; set; }
           public int SleepHoursTarget { get; set; }
-          public int? WorkoutPacketId { get; set; }
+          public int WorkoutPacketId { get; set; }
 
           public void CalculateBMR()
           {

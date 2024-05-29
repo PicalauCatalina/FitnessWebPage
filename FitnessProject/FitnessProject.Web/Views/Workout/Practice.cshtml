@@ -1,0 +1,105 @@
+@using System.Diagnostics
+@using System.Web.Optimization
+@model FitnessProject.Web.Models.GlobalModel
+
+@Scripts.Render("~/bundles/jquery.peity/js")
+<div class="content-body">
+     <div class="container-fluid">
+          <div class="row">
+               <div class="col-xl-12">
+                    <div class="card plan-list">
+                         <div class="card-body fs-24 text-black font-w600 mb-0 text-center">
+                              <div class="card">
+                                   Workout Today Progress
+                                   <div class="fill-bar">
+
+                                        @{
+                                             var first = true;
+                                             double percentage = 100;
+                                             var date = DateTime.Now.ToString("dddd");
+                                             bool hasActivity = false;
+                                             foreach (var workout in Model.Workout.WorkoutPacket.Json)
+                                             {
+                                                  if (workout.Day == date)
+                                                  {
+                                                       percentage = Model.ProgressList[0].WorkoutDone * 100 / workout.Exercise.Count;
+                                                  }
+                                             }
+                                        }
+                                        <div class="fill-progress" style="width: @percentage%;"></div>
+                                        <div class="progress-text fs-18">@percentage %</div>
+                                   </div>
+                              </div>
+                         </div>
+                    </div>
+               </div>
+
+               <div class="col-xl-12">
+                    <div class="card plan-list">
+                         <div class="card-header d-sm-flex d-block pb-0 border-0">
+                              <div class="mr-auto pr-3">
+                                   <h4 class="fs-24 text-black font-w600 mb-0 ">@Model.Workout.PacketName</h4>
+                                   <p class="fs-13 mb-0 text-black">Complete the entire workout to increase your progress</p>
+                              </div>
+                         </div>
+                         @using (Html.BeginForm("Practice", "Workout", FormMethod.Post))
+                         {
+                              foreach (var workout in Model.Workout.WorkoutPacket.Json)
+                              {
+                                   if (workout.Day == date)
+                                   {
+                                        hasActivity = true;
+                                        foreach (var exercise in workout.Exercise)
+                                        {
+                                             int index = workout.Exercise.IndexOf(exercise);
+                                             <div class="card-body">
+                                                  <div class="d-flex px-3 pt-3 list-row flex-wrap align-items-center mb-2">
+                                                       <img class="list-icon mr-3 mb-3" src="@exercise.GifLink" alt="GIF animat" style="width: 120px; height: 120px;">
+                                                       <div class="info mb-3">
+                                                            <h4 class="fs-20 text-black font-w600 ">@exercise.Name : @exercise.Sets x @exercise.Reps</h4>
+                                                       </div>
+                                                       @if (Model.ProgressList[0].WorkoutDone > index)
+                                                       {
+                                                            <button type="submit" class="btn mb-3 btn-success rounded ml-auto text-black" disabled>Completed</button>
+                                                       }
+                                                       else if (first)
+                                                       {
+                                                            first = false;
+                                                            <button type="submit" class="btn mb-3 btn-outline-primary rounded ml-auto"><i class="las la-caret-right scale-2 mr-3"></i>Done</button>
+                                                       }
+
+                                                  </div>
+                                             </div>
+                                        }
+                                   }
+                              }
+
+
+                              if (!hasActivity)
+                              {
+                                   <div class="card-body">
+                                        <div class="d-flex px-3 pt-3 list-row flex-wrap align-items-center mb-2">
+                                             <div class="info mb-3">
+                                                  <h4 class="fs-20 text-black font-w600 ">Free Day</h4>
+                                             </div>
+                                             @if (Model.ProgressList[0].WorkoutDone == 0)
+                                             {
+                                                  <button type="submit" class="btn mb-3 btn-outline-primary rounded ml-auto"><i class="las la-caret-right scale-2 mr-3"></i>Done</button>
+                                             }
+                                             else
+                                             {
+                                                  <button type="submit" class="btn mb-3 btn-success rounded ml-auto text-black" disabled>Completed</button>
+                                             }
+                                        </div>
+                                   </div>
+                              }
+
+
+                         }
+                    </div>
+               </div>
+
+          </div>
+     </div>
+</div>
+

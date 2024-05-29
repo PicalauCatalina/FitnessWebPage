@@ -1,0 +1,268 @@
+@using System.Web.Optimization
+@using Newtonsoft.Json
+@model FitnessProject.Web.Models.GlobalModel
+
+@Scripts.Render("~/bundles/jquery.peity/js")
+<div class="content-body">
+     <!-- row -->
+     <div class="container-fluid">
+          <div class="row">
+               <div class="col-xl col-md-6">
+                    <div class="col-xl-12">
+                         <div class="card">
+                              <div class="card-header d-sm-flex d-block pb-0 border-0">
+                                   <div class="d-flex align-items-center">
+                                        <span class="p-3 mr-3 rounded bg-primary">
+                                             <small class="text-primary">
+                                                  <svg width="40" height="40" viewbox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                       <path d="M39.9353 18.3544C39.8731 18.1666 38.3337 13.75 32.5 13.75C25.9703 13.75 22.8666 17.9659 21.795 19.8719C20.6306 19.1822 19.1838 18.75 17.5 18.75C15.7922 18.75 14.35 19.1375 13.1275 19.7072C13.5697 16.695 13.6987 13.1119 13.7353 11.25H17.5C17.9175 11.25 18.3081 11.0413 18.54 10.6934L21.04 6.94344C21.4075 6.39156 21.2806 5.64813 20.7494 5.25031C18.3166 3.42531 15.1269 1.25 13.75 1.25C11.6137 1.25 6.95688 6.24344 5.16469 9.38C0.0584378 18.3153 0 31.925 0 32.5C0 32.8797 0.172188 33.2391 0.46875 33.4759C7.56469 39.1522 15.7519 40 20 40C23.3716 40 29.9756 39.4391 36.3306 35.6834C38.5938 34.3456 40 31.8706 40 29.2244V18.75C40 18.6156 39.9781 18.4822 39.9353 18.3544ZM37.5 29.2244C37.5 30.9912 36.565 32.6419 35.0584 33.5316C29.2162 36.9844 23.1166 37.5 20 37.5C16.9178 37.5 9.15156 36.9453 2.51094 31.8981C2.58406 29.19 3.14094 17.96 7.33531 10.62C9.09187 7.54813 12.7112 4.16312 13.7722 3.76562C14.4606 3.96406 16.4566 5.23219 18.2972 6.55125L16.8309 8.75H12.5C11.8091 8.75 11.25 9.30969 11.25 10C11.25 10.0822 11.2344 17.9659 10.185 21.6878C9.46375 22.3391 8.88656 22.9872 8.43125 23.4994C8.2175 23.7403 8.02969 23.9522 7.86594 24.1166C7.3775 24.605 7.3775 25.3959 7.86594 25.8841C8.35437 26.3722 9.14531 26.3725 9.63344 25.8841C9.82625 25.6913 10.0472 25.4441 10.3 25.1603C11.6003 23.6975 13.7756 21.25 17.5 21.25C20.5884 21.25 22.5 23.1966 22.5 25C22.5 25.6903 23.0591 26.25 23.75 26.25C24.4409 26.25 25 25.6903 25 25C25 23.8181 24.5506 22.6022 23.7313 21.5581C24.1503 20.66 26.5119 16.25 32.5 16.25C35.99 16.25 37.2228 18.39 37.5 18.9922V29.2244Z" fill="white"></path>
+                                                  </svg>
+                                             </small>
+                                             <defs>
+                                                  <clippath id="clip1">
+                                                       <rect width="24" height="24" fill="white"></rect>
+                                                  </clippath>
+                                             </defs>
+                                        </span>
+                                        <div class="mr-auto pr-3">
+                                             <h4 class="text-black fs-20">Workout - Daily Results</h4>
+                                             <p class="fs-13 mb-0 text-black">for last 2 weeks</p>
+                                        </div>
+                                   </div>
+                                   <div class="dropdown mt-sm-0 mt-3">
+                                        <button type="button" class="btn rounded border border-light">
+                                             2 Weeks
+                                        </button>
+                                   </div>
+                              </div>
+                              <div class="card-body pb-0">
+                                   <div id="chartBar"></div>
+                              </div>
+                         </div>
+                    </div>
+                    <div class="text-center">
+                         <a href="/Home/Index" type="button" class="btn btn-outline-primary rounded">Back to Dashboard</a>
+                    </div>
+               </div>
+          </div>
+     </div>
+</div>
+
+<script>
+     (function ($) {
+          /* "use strict" */
+          function getFormattedDate(date) {
+               var day = date.getDate().toString().padStart(2, '0');
+               var month = (date.getMonth() + 1).toString().padStart(2, '0');
+               var year = date.getFullYear();
+               return day + '/' + month + '/' + year;
+          }
+
+          function getDays() {
+               var dates = [];
+               var today = new Date();
+               for (var i = 13; i >= 0; i--) {
+                    var date = new Date(today);
+                    date.setDate(today.getDate() - i);
+                    var formattedDate = getFormattedDate(date);
+                    dates.push(formattedDate);
+               }
+               return dates;
+          }
+
+          var Days = getDays();
+          var reducedDays = Days.map(function (date) {
+               return date.substr(0, 5);
+          });
+
+          var ProgressList = @Html.Raw(JsonConvert.SerializeObject(Model.ProgressList));
+          var WorkoutPacket = @Html.Raw(JsonConvert.SerializeObject(Model.Workout.WorkoutPacket.Json));
+          console.log(WorkoutPacket);
+          var workout_data = [];
+
+
+          for (var i = 0; i <= 13; i++) {
+               var dateToFind = Days[i];
+               var foundItem = ProgressList.find(function (item) {
+                    return item.Date === dateToFind;
+               });
+
+               if (foundItem) {
+                    var dateString = dateToFind ;
+                    var dateParts = dateString.split("/");
+                    var formattedDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
+                    var dayName = formattedDate.toLocaleDateString("en-US", { weekday: "long" });
+
+                    var foundWorkoutDay = WorkoutPacket.find(function (item) {
+                         return item.Day === dayName;
+                    });
+
+                    if (foundWorkoutDay) {
+                         workout_data.push(foundItem.WorkoutDone * 100 / foundWorkoutDay.Exercise.length);
+                    } else {
+                         workout_data.push(100);
+                    }
+
+
+               } else {
+                    workout_data.push(0);
+               }
+          }
+          var dzChartlist = function () {
+
+               var screenWidth = $(window).width();
+               var donutChart = function () {
+                    $("span.donut").peity("donut", {
+                         width: "90",
+                         height: "90"
+                    });
+               }
+               var chartBar = function () {
+                    var optionsArea = {
+                         series: [{
+                              name: "Workout",
+                              data: workout_data
+                         }
+                         ],
+                         chart: {
+                              height: 350,
+                              type: 'area',
+                              group: 'social',
+                              toolbar: {
+                                   show: false
+                              },
+                              zoom: {
+                                   enabled: false
+                              },
+                         },
+                         dataLabels: {
+                              enabled: false
+                         },
+                         stroke: {
+                              width: [4],
+                              colors: ['#00d941'],
+                              curve: 'straight'
+                         },
+                         legend: {
+                              show: false,
+                              tooltipHoverFormatter: function (val, opts) {
+                                   return val + ' - ' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + ''
+                              },
+                              markers: {
+                                   fillColors: ['#C046D3', '#1EA7C5', '#00d941'],
+                                   width: 19,
+                                   height: 19,
+                                   strokeWidth: 0,
+                                   radius: 19
+                              }
+                         },
+                         markers: {
+                              size: [6],
+                              strokeWidth: [4],
+                              strokeColors: ['#00d941'],
+                              border: 0,
+                              colors: ['#fff'],
+                              hover: {
+                                   size: 10,
+                              }
+                         },
+                         xaxis: {
+                              categories: reducedDays,
+                              labels: {
+                                   style: {
+                                        colors: '#3E4954',
+                                        fontSize: '14px',
+                                        fontFamily: 'Poppins',
+                                        fontWeight: 100,
+
+                                   },
+                              },
+                         },
+                         yaxis: {
+                              min: 0,
+                              max: 100,
+                              tickAmount: 11,
+                              forceNiceScale: true,
+                              labels: {
+                                   offsetX: -16,
+                                   style: {
+                                        colors: '#3E4954',
+                                        fontSize: '14px',
+                                        fontFamily: 'Poppins',
+                                        fontWeight: 100,
+
+                                   },
+                                   formatter: function (value) {
+                                        return Math.floor(value) + '%';
+                                   }
+                              },
+                         },
+                         fill: {
+                              colors: ['#00d941'],
+                              type: 'solid',
+                              opacity: 0.2
+                         },
+                         colors: ['#00d941'],
+                         grid: {
+                              borderColor: '#f1f1f1',
+                              xaxis: {
+                                   lines: {
+                                        show: true
+                                   }
+                              }
+                         },
+                         responsive: [{
+                              breakpoint: 575,
+                              options: {
+                                   chart: {
+                                        height: 250,
+                                   },
+                                   markers: {
+                                        size: [4],
+                                        hover: {
+                                             size: 7,
+                                        }
+                                   }
+                              }
+                         }]
+                    };
+                    var chartArea = new ApexCharts(document.querySelector("#chartBar"), optionsArea);
+                    chartArea.render();
+
+               }
+
+               /* Function ============ */
+               return {
+                    init: function () {
+                    },
+
+
+                    load: function () {
+                         donutChart();
+                         chartBar();
+                    },
+
+                    resize: function () {
+
+                    }
+               }
+
+          }();
+
+          jQuery(document).ready(function () {
+          });
+
+          jQuery(window).on('load', function () {
+               setTimeout(function () {
+                    dzChartlist.load();
+               }, 1000);
+
+          });
+
+          jQuery(window).on('resize', function () {
+
+
+          });
+
+     })(jQuery);
+</script>

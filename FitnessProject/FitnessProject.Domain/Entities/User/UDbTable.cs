@@ -48,7 +48,7 @@ namespace FitnessProject.Domain.Entities.User
 
           [Required]
           [Display(Name = "Workout Packet ID")]
-          public int? WorkoutPacketID { get; set; }
+          public int WorkoutPacketID { get; set; }
 
 
           [DataType(DataType.Date)]

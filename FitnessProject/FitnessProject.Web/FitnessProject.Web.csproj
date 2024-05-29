@@ -500,6 +500,9 @@
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Views\Nutrition\Statistic.cshtml" />
+    <Content Include="Views\Workout\Index.cshtml" />
+    <Content Include="Views\Workout\Practice.cshtml" />
+    <Content Include="Views\Workout\Statistic.cshtml" />
     <Content Include="Views\Workspace\ManageNutrition.cshtml" />
     <Content Include="Views\Workspace\ManageWorkout.cshtml" />
     <Content Include="Web.config" />
@@ -514,6 +517,7 @@
     <Compile Include="Controllers\NutritionController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\SignupController.cs" />
+    <Compile Include="Controllers\WorkoutController.cs" />
     <Compile Include="Controllers\WorkspaceController.cs" />
     <Compile Include="Extensions\HttpContextExtensions.cs" />
     <Compile Include="Filters\AuthorizeModAttribute.cs" />
@@ -524,7 +528,6 @@
     </Compile>
     <Compile Include="Models\GlobalModel.cs" />
     <Compile Include="Models\Nutrition.cs" />
-    <Compile Include="Models\NutritionQuantity.cs" />
     <Compile Include="Models\UserLogin.cs" />
     <Compile Include="Models\UserProgress.cs" />
     <Compile Include="Models\UserSignup.cs" />

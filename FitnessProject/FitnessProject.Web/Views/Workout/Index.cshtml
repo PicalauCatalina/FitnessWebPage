@@ -1,0 +1,105 @@
+@using System.Globalization
+@model FitnessProject.Web.Models.GlobalModel
+<div class="content-body">
+     <div class="container-fluid">
+          <div class="row">
+               <div class="col-xl-3 col-xxl-4">
+                    <div class="row">
+                         <div class="col-xl-12">
+                              <div class="card flex-xl-column flex-md-row flex-column">
+                                   <div class="card-body border-bottom pb-4 p-2 event-calender">
+                                        <input type='text' class="form-control d-none" id='datetimepicker1'>
+                                   </div>
+                              </div>
+                         </div>
+                    </div>
+               </div>
+               <div class="col-xl-9 col-xxl-8">
+                    <div class="row">
+                         <div class="col-xl-12">
+                              <div class="card plan-list">
+                                   <div class="card-header d-sm-flex d-block pb-0 border-0">
+                                        <div class="mr-auto pr-3">
+                                             <h4 class="text-black fs-20">Today</h4>
+                                             <p class="fs-13 mb-0 text-black">Complete the entire workout to increase your progress</p>
+                                        </div>
+                                   </div>
+                                   @{
+                                        var date = DateTime.Now.ToString("dddd");
+                                        bool hasActivity = false;
+
+                                        <div class="card-body">
+                                             <div class="d-flex px-3 pt-3 list-row flex-wrap align-items-center mb-2">
+                                                  <div class="list-icon mr-3 mb-3">
+                                                       <p class="fs-24 text-primary mb-0 mt-2">@DateTime.Now.ToString("dd")</p>
+                                                       <span class="fs-13 text-primary">@date</span>
+                                                  </div>
+                                                  <div class="info mb-3">
+                                                       @foreach (var workout in Model.Workout.WorkoutPacket.Json)
+                                                       {
+                                                            if (workout.Day == date)
+                                                            {
+                                                                 hasActivity = true;
+                                                                 <h4 class="fs-20 text-black font-w600 ">It's Workout Time</h4>
+                                                            }
+                                                       }
+                                                       @if (!hasActivity)
+                                                       {
+                                                            <h4 class="fs-20 text-black font-w600 ">Today is your free day</h4>
+                                                       }
+
+                                                  </div>
+
+                                                  <a href="/Workout/Practice" class="btn mb-3 btn-outline-primary rounded ml-auto"><i class="las la-caret-right scale-2 mr-3"></i>Start Workout</a>
+
+                                             </div>
+                                        </div>
+
+                                        <div class="card-header d-sm-flex d-block pb-0 border-0">
+                                             <div class="mr-auto pr-3">
+                                                  <div class="dropdown mt-sm-0 mt-3">
+                                                       <button type="button" class="btn rounded border border-light " aria-expanded="false">
+                                                            Last 2 Weeks Progress
+                                                       </button>
+                                                  </div>
+                                             </div>
+                                        </div>
+                                        foreach (var progress in Model.ProgressList)
+                                        {
+                                             string dateString = progress.Date;
+                                             string format = "dd/MM/yyyy";
+                                             DateTime dateTime = DateTime.ParseExact(dateString, format, CultureInfo.InvariantCulture);
+                                             double percentage = 100;
+                                             foreach (var workout in Model.Workout.WorkoutPacket.Json)
+                                             {
+                                                  if (workout.Day == dateTime.ToString("dddd"))
+                                                  {
+                                                       percentage = progress.WorkoutDone * 100 / workout.Exercise.Count;
+                                                  }
+                                             }
+
+                                             <div class="card-body">
+                                                  <div class="d-flex px-3 pt-3 list-row flex-wrap align-items-center mb-2">
+                                                       <div class="list-icon mr-3 mb-3">
+                                                            <p class="fs-24 text-primary mb-0 mt-2">@dateTime.ToString("dd")</p>
+                                                            <span class="fs-13 text-primary">@dateTime.ToString("dddd")</span>
+                                                       </div>
+                                                       <div class="info mb-3">
+                                                            <h4 class="fs-20 ">@Model.Workout.PacketName</h4>
+                                                            <span class="text-danger font-w600">FINISHED</span>
+                                                       </div>
+                                                       <button type="submit" class="btn mb-3 btn-success rounded ml-auto text-black" disabled>Completed @percentage %</button>
+                                                  </div>
+                                             </div>
+                                        }
+
+                                   }
+                              </div>
+                         </div>
+                    </div>
+               </div>
+
+
+          </div>
+     </div>
+</div>

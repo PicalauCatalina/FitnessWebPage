@@ -11,7 +11,7 @@ namespace FitnessProject.Domain.Entities.User
           public int Height { get; set; }
           public float Weight { get; set; }
           public float WeightTarget { get; set; }
-          public int? WorkoutPacketId { get; set; }
+          public int WorkoutPacketId { get; set; }
           public int Age { get; set; }
           public string Gender { get; set; }
           public string LoginIp { get; set; }
