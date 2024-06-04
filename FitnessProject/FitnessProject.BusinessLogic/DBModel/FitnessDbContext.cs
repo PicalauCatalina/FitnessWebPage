@@ -17,6 +17,11 @@ namespace FitnessProject.BusinessLogic.DBModel
           public virtual DbSet<NutritionDbTable> Nutrition { get; set; }
           public virtual DbSet<WorkoutDbTable> Workout { get; set; }
           public virtual DbSet<UProgressDbTable> Progress { get; set; }
+          
+          protected override void OnModelCreating(DbModelBuilder modelBuilder)
+          {
+               base.OnModelCreating(modelBuilder);
+          }
 
      }
 }
