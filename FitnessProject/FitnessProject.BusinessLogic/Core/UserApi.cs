@@ -356,15 +356,25 @@ namespace FitnessProject.BusinessLogic.Core
           public List<UProgressData> RestoreProgressAction(int numberOfDays, int userId)
           {
               var dateLimitString = DateTime.Now.AddDays(-numberOfDays).ToString("dd/MM/yyyy");
-              DateTime dateLimit = DateTime.ParseExact(dateLimitString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
+              if (DateTime.TryParseExact(dateLimitString, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var dateLimit))
+              {
+              }
+              else
+              {
+                  throw new Exception("Invalid date format");
+              }
               List<UProgressData> activity = new List<UProgressData>();
               using (var db = new FitnessDbContext())
               {
                   var progressList = db.Progress
                       .Where(u => u.UserId == userId)
                       .AsEnumerable()
-                      .Where(u => DateTime.ParseExact(u.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture) >= dateLimit)
+                      .Where(u => 
+                      {
+                          bool success = DateTime.TryParseExact(u.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var parsedDate);
+                          return success && parsedDate >= dateLimit;
+                      })
                       .ToList();
 
                   foreach (var item in progressList)
@@ -378,8 +388,23 @@ namespace FitnessProject.BusinessLogic.Core
                       });
                   }
               }
-              activity.Sort((x, y) => DateTime.ParseExact(x.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture)
-                  .CompareTo(DateTime.ParseExact(y.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture)));
+              activity.Sort((x, y) =>
+              {
+                  var successX = DateTime.TryParseExact(x.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var dateX);
+                  var successY = DateTime.TryParseExact(y.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var dateY);
+
+                  switch (successX)
+                  {
+                      case true when successY:
+                          return dateX.CompareTo(dateY);
+                      case true:
+                          return -1;
+                      default:
+                      {
+                          return successY ? 1 : 0;
+                      }
+                  }
+              });
 
               activity.Reverse();
               return activity;

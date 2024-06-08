@@ -66,9 +66,15 @@
                                         </div>
                                         foreach (var progress in Model.ProgressList)
                                         {
-                                             string dateString = progress.Date;
-                                             string format = "dd/MM/yyyy";
-                                             DateTime dateTime = DateTime.ParseExact(dateString, format, CultureInfo.InvariantCulture);
+                                             var dateString = progress.Date;
+                                             const string format = "dd/MM/yyyy";
+                                             if (DateTime.TryParseExact(dateString, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out var dateTime))
+                                             {
+                                             }
+                                             else
+                                             {
+                                                  throw new Exception("Invalid date format");
+                                             }
                                              double percentage = 100;
                                              foreach (var workout in Model.Workout.WorkoutPacket.Json)
                                              {
